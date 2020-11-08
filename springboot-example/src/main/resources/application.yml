@@ -1,0 +1,49 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    username: root
+    password: master3418
+    url: jdbc:mysql://localhost:3306/local?serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 设置DruidDataSource参数
+    initialSize: 5
+    maxActive: 20
+    filters: stat,wall
+  jpa:
+    # 控制台显示sql
+    show-sql: true
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+
+#    schema:
+#      - classpath:department.sql
+
+#spring:
+#  profiles:
+#    active: prd
+---
+#文档块
+server:
+  port: 8083
+spring:
+  profiles: dev
+
+---
+server:
+  port: 8084
+spring:
+  profiles: prd
+
+---
+#person:
+#  name: yml
+#  age: 11
+
+
+

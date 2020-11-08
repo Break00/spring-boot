@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace:填写映射当前的Mapper接口-->
+<mapper namespace="com.jason.lee.mapper.EmployeeMapper">
+    <!-- sql:提取重复的代码,要使用该代码的时候就直接使用<include>标签-->
+    <sql id="select">select * from employee</sql>
+
+    <!-- EmployeeNew getEmplById(Integer id)
+        id:填写在XxxMapper接口中的方法名
+        parameterType:填写参数的类型
+        resultType:填写方法中返回值的类型，不用写全路径，不区分大小写
+    -->
+    <select id="getEmplById" parameterType="Integer" resultType="com.jason.lee.entity.EmployeeNew">
+        <!-- include:用于加载提取公共的sql语句，与<sql>标签对应refid:填写<sql>标签中的id属性-->
+        <include refid="select"></include>
+        where id = #{id}
+    </select>
+
+</mapper>
