@@ -1,33 +1,43 @@
 package com.jason.lee;
 
-import com.jason.lee.entity.Person;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 
-import javax.sql.DataSource;
 
 
 @SpringBootTest
 class SpringbootExampleApplicationTests {
 
 	@Autowired
-	Person person;
+	RabbitTemplate template;
 
 	@Autowired
-	ApplicationContext ioc;
-
-	@Autowired
-	DataSource dataSource;
-
+	AmqpAdmin amqpAdmin;
 
 	@Test
-	void contextLoads() {
-//		System.out.println(ioc.containsBean("helloService"));
-//		System.out.println(ioc.containsBean("HelloService"));
-//		System.out.println(person.toString());
-		System.out.println(dataSource.getClass().getName());
+	public void createExchange(){
+		// 交换器
+		amqpAdmin.declareExchange(new DirectExchange("exchange.new"));
+		// 队列
+		amqpAdmin.declareQueue(new Queue("iflytek.new", true));
+		// 绑定
+		amqpAdmin.declareBinding(new Binding("iflytek.new", Binding.DestinationType.QUEUE,"exchange.new","iflytek.new",null));
 	}
 
+	@Test
+	public void sendMessage(){
+		template.convertAndSend("exchange.direct","xmu.news","ha ha");
+	}
+
+	@Test
+	public void receiveMessage(){
+		Object msg = template.receiveAndConvert("xmu.news");
+		System.out.println(msg);
+	}
 }
